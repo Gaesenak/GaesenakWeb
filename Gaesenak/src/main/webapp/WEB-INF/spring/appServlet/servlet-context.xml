@@ -27,5 +27,5 @@
 	</beans:bean>
 
 
-	<context:component-scan base-package="com.recruit.controller" />
+	<context:component-scan base-package="com.gaesenak.controller" />
 </beans:beans>
