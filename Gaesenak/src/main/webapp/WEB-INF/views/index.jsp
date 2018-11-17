@@ -7,6 +7,7 @@
 <title>Geasenak</title>
 </head>
 <body>
-List Page
+<h1>Index Page</h1>
+<h2>기본 페이지임</h2>
 </body>
 </html>
