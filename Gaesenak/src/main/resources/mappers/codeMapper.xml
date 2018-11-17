@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.recruit.mapper.CodeMapper">
+
+	<select id="CodeList" resultType="com.recruit.domain.CodeVO">
+		select id, career,
+		tid from
+		tblcode where tid = #{tid};
+	</select>
+
+	<select id="readCode" resultType="com.recruit.domain.CodeVO">
+		select id, career,
+		tid from
+		tblcode where id = #{id};
+	</select>
+
+	<select id="selectJobGroup" resultType="com.recruit.domain.JobGroupVO">
+		select id, jobgroup, id2
+		from
+		tbljobgroup where id = #{id};
+	</select>
+
+	<select id="selectRegion" resultType="com.recruit.domain.RegionVO"
+		parameterType="java.util.Map">
+		select rgbid, rgbname, rgsid, rgsname
+		from
+		tblregion where
+		rgbid =
+		#{rgbid} and rgsid = #{rgsid};
+	</select>
+
+	<select id="codeToJobName" resultType="String">
+		select
+		if(a.jobgroup='전체',b.jobgroup,concat(b.jobgroup,', ', a.jobgroup))
+		from tbljobgroup a, tbljobgroup b
+		where a.id = #{code}
+		and a.id2 = b.id;
+	</select>
+
+	<select id="codeToRegName" resultType="String" parameterType="java.util.Map">
+		select if(#{rgsid} = 99, rgbname, concat(rgbname,', ', rgsname)) from
+		tblregion
+		where if(#{rgsid} = 99, rgbid = #{rgbid} and rgsid = 1 ,
+		rgbid = #{rgbid}
+		and rgsid = #{rgsid})
+		;
+	</select>
+
+	<select id="codeToCodName" resultType="String">
+		select career from
+		tblcode
+		where id = #{code};
+	</select>
+
+	<select id="getTbljobgroup" resultType="com.recruit.domain.JobGroupVO">
+		select * from
+		tbljobgroup;
+	</select>
+
+	<select id="getTblregion1" resultType="com.recruit.domain.RegionVO">
+		select distinct rgbid,
+		rgbname from tblregion;
+	</select>
+
+	<select id="getTblregion2" resultType="com.recruit.domain.RegionVO">
+		select * from tblregion;
+	</select>
+
+	<select id="getTblcode" resultType="com.recruit.domain.CodeVO">
+		select * from tblcode;
+	</select>
+</mapper>  

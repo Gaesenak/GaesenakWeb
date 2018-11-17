@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.recruit.mapper.adminMapper">
+
+	<select id="read" resultType="UserVO">
+	select
+		id, pname, email, birth, authCode
+	from
+		tbluser
+	where id = #{id}
+	</select>
+
+	<update id="update">
+		update tbluser set
+		pw = #{pw}, pname = #{pname}, email = #{email}, birth = #{birth}
+		where id = #{id}
+	</update>
+
+	<delete id="delete">
+		delete from tbluser where id = #{id}
+	</delete>
+
+	<select id="listAll" resultType="UserVO">
+	<![CDATA[
+	select
+		id, pname, email, birth
+	from
+		tbluser
+	where
+		cname is null and id != 'admin'
+	order by id
+	]]>
+	</select>
+	
+	<select id="listCriteria" resultType="UserVO">
+	<![CDATA[
+	select
+		id, pname, email, birth
+	from
+		tbluser
+	where
+		cname is null and id != 'admin'
+	order by id
+	limit #{pageStart}, #{perPageNum}
+	]]>	
+	</select>
+
+	<select id="listPage" resultType="UserVO">
+	<![CDATA[
+	select
+		id, pname, email, birth
+	from
+		tbluser
+	where
+		cname is null and id != 'admin'
+	order by id
+	limit #{page}, 10
+	]]>
+	</select>
+	
+	<select id="countPaging" resultType="int">
+	<![CDATA[
+	select
+		count(pname)
+	from
+		tbluser
+	where
+		cname is null and id != 'admin'
+	]]>
+	</select>
+	
+	<select id="listSearch" resultType="UserVO">
+	<![CDATA[
+	select *
+	from
+		tbluser
+	where
+		cname is null and id != 'admin'
+	]]>
+	
+	<include refid="search"></include>
+	
+	<![CDATA[
+	order by id
+	limit #{pageStart}, #{perPageNum}
+	]]>
+	</select>
+	
+	<sql id="search">
+	<if test="searchType != null">
+		<if test="searchType == 'id'.toString()">
+			and id like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchType == 'pname'.toString()">
+			and pname like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchType == 'email'.toString()">
+			and email like CONCAT('%', #{keyword}, '%')
+		</if>
+	</if>
+	</sql>
+	
+	<select id="listSearchCount" resultType="int">
+	<![CDATA[
+	select count(pname)
+	from tbluser
+	where cname is null and id != 'admin'
+	]]>
+	<include refid="search"></include>
+	</select>
+
+
+	<select id="aread" resultType="UserVO">
+	select
+		id, pw, pname, email, birth
+	from
+		tbluser
+	where id = 'admin'
+	</select>
+	
+	<update id="aupdate">
+		update tbluser set
+		pw = #{pw}, pname = #{pname}, email = #{email}, birth = #{birth}
+		where id = 'admin'
+	</update>
+	
+	<select id="readpw" resultType="String">
+	select
+		pw
+	from
+		tbluser
+	where id = #{id}
+	</select>
+	
+	<select id="pcount" resultType="int">
+	<![CDATA[
+	select
+		count(pname)
+	from
+		tbluser
+	where
+		cname is null and id != 'admin'
+	]]>
+	</select>
+	
+	<select id="ccount" resultType="int">
+	<![CDATA[
+	select
+		count(cname)
+	from
+		tbluser
+	]]>
+	</select>
+	
+	<select id="weekPcount" resultType="int">
+	select count(pname) from tbluser
+	where cname is null and id != 'admin'
+	and joindate between current_date()-interval 6 day and current_date()
+	</select>
+	
+	<select id="weekCcount" resultType="int">
+	select count(cname) from tbluser
+	where joindate between current_date()-interval 6 day and current_date()
+	</select>
+	
+	<select id="weekResumeCount" resultType="int">
+	select count(bno) from tblresume
+	where regdate between current_date()-interval 6 day and current_date()
+	</select>
+	
+	<select id="weekRecruitCount" resultType="int">
+	select count(bno) from tblrecruit
+	where createdate between current_date()-interval 6 day and current_date()
+	</select>
+	
+	<update id="emailauth">
+	update tbluser set
+	authCode = null
+	where id = #{id}
+	</update>
+	
+	<select id="count_recruit" resultType="StatisticVO">
+	select t.selected_date as day, count(date_format(u.createdate, '%Y-%m-%d')) as weekRecruit
+	from project.tblrecruit u right outer join(
+	select * from 
+	(select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+	where selected_date between current_date()-interval 6 day and current_date()
+	) t
+	on date_format(u.createdate, '%Y-%m-%d') = t.selected_date
+	group by date_format(u.createdate, '%Y-%m-%d'), t.selected_date
+	order by t.selected_date;
+	</select>
+	
+	<select id="jobgroup_recruit" resultType="StatisticVO">
+	select distinct j.jobgroup as jobgroup, count(r.jobgroupid) as weekJobgroup from project.tblrecruit r, project.tbljobgroup j
+	where r.jobgroupid = j.id and j.id != 0 and r.createdate between current_date()-interval 6 day and now()
+	group by r.jobgroupid
+	order by weekJobgroup desc
+	limit 4
+	</select>
+	
+	<!-- 채용공고 지역별 기준 그래프 -->
+	<select id="rgb_recruit" resultType="StatisticVO">
+	select distinct g.rgbname, count(distinct(r.bno)) as weekRgb from project.tblrecruit r, project.tblregion g
+	where r.rgbid = g.rgbid and g.rgbid != 'Z' and r.createdate between current_date()-interval 6 day and now()
+	group by g.rgbid
+	order by weekRgb desc
+	limit 4
+	</select>
+	
+	<select id="weekPerson" resultType="StatisticVO">
+	select t.selected_date as day, (count(u.id)-count(u.cname)) as weekPerson
+	from project.tbluser u right outer join(
+	select * from 
+	(select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+	where selected_date between current_date()-interval 6 day and current_date()
+	) t
+	on date_format(u.joindate, '%Y-%m-%d') = t.selected_date
+	group by date_format(u.joindate, '%Y-%m-%d'), t.selected_date
+	order by t.selected_date
+	</select>
+	
+	<select id="weekCompany" resultType="StatisticVO">
+	select t.selected_date as day, count(u.cname) as weekCompany
+	from project.tbluser u right outer join(
+	select * from 
+	(select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+	where selected_date between current_date()-interval 6 day and current_date()
+	) t
+	on date_format(u.joindate, '%Y-%m-%d') = t.selected_date
+	group by date_format(u.joindate, '%Y-%m-%d'), t.selected_date
+	order by t.selected_date
+	</select>
+	
+	<select id="weekResume" resultType="StatisticVO">
+	select t.selected_date as day, count(r.bno) as weekResume
+	from project.tblresume r right outer join(
+	select * from 
+	(select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+	(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+	where selected_date between current_date()-interval 6 day and current_date()
+	) t
+	on date_format(r.regdate, '%Y-%m-%d') = t.selected_date
+	group by date_format(r.regdate, '%Y-%m-%d'), t.selected_date
+	order by t.selected_date;
+	</select>
+
+	<select id="jobgroup_resume" resultType="StatisticVO">
+	select distinct j.jobgroup as rJobgroup, count(r.jobgroupid) as weekRJobgroup from project.tblresume r, project.tbljobgroup j
+	where r.jobgroupid = j.id and j.id != 0 and r.regdate between current_date()-interval 6 day and now()
+	group by r.jobgroupid
+	order by weekRJobgroup desc
+	limit 4;
+	</select>
+	
+	<!-- 이력서 지역별 그래프 -->
+	<select id="rRgb_resume" resultType="StatisticVO">
+	select distinct g.rgbname as rRgbname, count(distinct(r.bno)) as weekRRgb from project.tblresume r, project.tblregion g
+	where r.rgbid = g.rgbid and g.rgbid != 'Z' and r.regdate between current_date()-interval 6 day and now()
+	group by g.rgbid
+	order by weekRRgb desc
+	limit 4
+	</select>
+</mapper>
