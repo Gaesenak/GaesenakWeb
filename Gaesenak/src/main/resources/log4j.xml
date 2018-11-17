@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.recruit.controller">
+	<logger name="com.geasenak.controller">
 		<level value="info" />
 	</logger>
 	

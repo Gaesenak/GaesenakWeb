@@ -15,32 +15,32 @@
 <!-- 	 <context:property-placeholder location="file:/zzz/*.properties" />  -->
 	<!--<context:property-placeholder location="file:/Users/hoonys/sts-bundle/*.properties"/> -->
 
-<!--   	<bean id="dataSource" -->
-<!-- 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"> -->
-<!-- 		<property name="driverClassName" value="${jdbc.driver}"></property> -->
-<!-- 		<property name="url" value="${jdbc.url}&amp;characterEncoding=utf-8&amp;serverTimezone=UTC&amp;zeroDateTimeBehavior=convertToNull"></property> -->
-<!-- 		<property name="username" value="${jdbc.username}"></property> -->
-<!-- 		<property name="password" value="${jdbc.password}"></property> -->
-<!-- 	</bean> -->
+  	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+		<property name="url" value="jdbc:log4jdbc:mysql://127.0.0.1:3306/gaesenak?useSSL=false&amp;characterEncoding=utf-8&amp;serverTimezone=UTC&amp;zeroDateTimeBehavior=convertToNull"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="1234"></property>
+	</bean>
 
-<!-- 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> -->
-<!-- 		<property name="dataSource" ref="dataSource"></property> -->
-<!-- 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property> -->
-<!-- 		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"> -->
-<!-- 		</property> -->
-<!-- 	</bean> -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml">
+		</property>
+	</bean>
 
-<!-- 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" -->
-<!-- 		destroy-method="clearCache"> -->
-<!-- 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg> -->
-<!-- 	</bean> -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
+		destroy-method="clearCache">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+	</bean>
  
-<!-- 	<bean id="transactionManager" -->
-<!-- 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> -->
-<!-- 		<property name="dataSource" ref="dataSource"></property> -->
-<!-- 	</bean> -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
 
-	<context:component-scan base-package="com.gaesenak.persistence" />
+	<context:component-scan base-package="com.gaesenak.dao" />
 	<context:component-scan base-package="com.gaesenak.service" />
 
 <!--   	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> -->
