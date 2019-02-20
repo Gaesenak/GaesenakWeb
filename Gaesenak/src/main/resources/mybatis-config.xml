@@ -3,7 +3,7 @@
 	PUBLIC "-//mybatis.org//DTD config 3.-//EN"
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<typeAliases>
-		<package name="com.gaesenak.vo" />
-	</typeAliases>
+	<!-- <typeAliases>
+		<typeAlias alias = "listVO" type="com.gaesenak.vo.ListVO" />
+	</typeAliases> -->
 </configuration>

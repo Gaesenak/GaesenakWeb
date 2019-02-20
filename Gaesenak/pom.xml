@@ -7,7 +7,8 @@
 	<name>Recruit</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
-
+ 
+ 
 	<properties>
 		<java-version>1.8</java-version>
 		<org.springframework-version>4.3.3.RELEASE</org.springframework-version>
@@ -253,6 +254,17 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>4.1.0.RELEASE</version>
 		</dependency>
+		<!--<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency> -->
+		<!-- https://mvnrepository.com/artifact/org.apache.taglibs/taglibs-standard-spec -->
+		<dependency>
+    		<groupId>org.apache.taglibs</groupId>
+    		<artifactId>taglibs-standard-spec</artifactId>
+   			<version>1.2.5</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>

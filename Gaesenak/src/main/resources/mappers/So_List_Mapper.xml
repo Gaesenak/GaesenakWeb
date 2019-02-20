@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaesenak.mapper.octpusyardMapper">
+
+	<insert id="insertList" >
+		INSERT 	
+	</insert>
+
+	<select id="selectAllList" > 
+		SELECT * FROM table_name;
+	</select>
+	
+	<select id="selectList" >
+		SELECT * FROM table_name;
+	</select>
+	
+	<update id="updateList" >
+	 	update * SET col WHERE 조건;
+	</update>
+	
+	<delete id="deleteList" >
+		delete * FROM table_name WHERE col;
+	</delete>
+	
+</mapper>
